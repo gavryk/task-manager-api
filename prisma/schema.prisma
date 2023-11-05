@@ -13,14 +13,15 @@ model User {
   hash String
   name  String?
   role String? @default("Member")
-  createAt DateTime @default(now())
-  updated DateTime @updatedAt
+  createAt DateTime @default(now()) @map("created_at")
+  updated DateTime @default(now()) @updatedAt @map("updated_at")
 }
 
 model Task {
   id    String     @id @default(auto()) @map("_id") @db.ObjectId
-  createAt DateTime @default(now())
-  updated DateTime @updatedAt
+  createAt DateTime @default(now()) @map("created_at")
+  updated DateTime @default(now()) @updatedAt @map("updated_at")
   title String
   description String
+  isDone Boolean @default(false)
 }
