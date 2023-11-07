@@ -7,21 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
 model User {
   id    String     @id @default(auto()) @map("_id") @db.ObjectId
   email String  @unique
   hash String
   name  String?
-  role String? @default("Member")
-  createAt DateTime @default(now()) @map("created_at")
-  updated DateTime @default(now()) @updatedAt @map("updated_at")
+  role Role @default(USER)
+  createAt DateTime @default(now())
+  updated DateTime @updatedAt
+  tasks Task[]
+
+  @@map("users")
 }
 
 model Task {
   id    String     @id @default(auto()) @map("_id") @db.ObjectId
-  createAt DateTime @default(now()) @map("created_at")
-  updated DateTime @default(now()) @updatedAt @map("updated_at")
+  createAt DateTime @default(now())
+  updated DateTime @updatedAt
   title String
   description String
   isDone Boolean @default(false)
+
+  userId String @db.ObjectId
+  user User @relation(fields: [userId], references: [id])
+  @@map("tasks")
 }
