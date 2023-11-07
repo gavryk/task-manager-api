@@ -10,5 +10,5 @@ export class AuthDto {
 	password: string;
 
 	@IsString()
-	name: string;
+	name: string = 'John Doe';
 }
