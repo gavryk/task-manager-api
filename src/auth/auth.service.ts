@@ -5,6 +5,7 @@ import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { Response } from 'express';
 
 @Injectable()
 export class AuthService {
@@ -52,7 +53,10 @@ export class AuthService {
 		if (!pwMatches) throw new ForbiddenException('Credential incorrect');
 		//send back the user
 		// delete user.hash;
-		return this.signToken(user.id, user.email);
+		const tokenResponse = await this.signToken(user.id, user.email);
+		// Set cookie with Token
+		// res.cookie('access_token', tokenResponse.access_token, { httpOnly: true });
+		return tokenResponse;
 	}
 
 	async signToken(userId: string, email: string): Promise<{ access_token: string }> {
@@ -63,7 +67,7 @@ export class AuthService {
 		const secret = this.config.get('JWT_SECRET');
 
 		const token = await this.jwt.signAsync(payload, {
-			expiresIn: '15m',
+			expiresIn: '30d',
 			secret: secret,
 		});
 
