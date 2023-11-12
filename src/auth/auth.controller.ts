@@ -13,7 +13,7 @@ export class AuthController {
 	}
 
 	@Post('signin')
-	async signin(@Body() dto: AuthDto, @Res() res: Response) {
+	async signin(@Body() dto: AuthDto, @Res({ passthrough: true }) res: Response) {
 		const tokenResponse = await this.authService.signin(dto, res);
 		return tokenResponse;
 	}

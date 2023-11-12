@@ -39,31 +39,38 @@ export class AuthService {
 	}
 
 	async signin(dto: AuthDto, res: Response) {
-		//Find the user by email
-		const user = await this.prisma.user.findUnique({
-			where: {
-				email: dto.email,
-			},
-		});
-		//if user does not exist throw exception
-		if (!user) throw new ForbiddenException('Credential incorrect');
-		//compare password
-		const pwMatches = await argon.verify(user.hash, dto.password);
-		//if password incorrect throw exception
-		if (!pwMatches) throw new ForbiddenException('Credential incorrect');
-		//send back the user
-		// delete user.hash;
-		const tokenResponse = await this.signToken(user.id, user.email);
-		if (!tokenResponse)
-			throw new BadRequestException(`Cannot Get User Name: ${dto.name}, Email: ${dto.email}`);
-		// Set cookie with Token
-		res.cookie('access_token', tokenResponse.access_token, {
-			httpOnly: true,
-			secure: this.config.get('NODE_ENV', 'development') === 'production',
-			maxAge: 30 * 24 * 60 * 60 * 1000, //30d
-			sameSite: 'lax',
-		});
-		return tokenResponse;
+		try {
+			//Find the user by email
+			const user = await this.prisma.user.findUnique({
+				where: {
+					email: dto.email,
+				},
+			});
+			//if user does not exist throw exception
+			if (!user) throw new ForbiddenException('Credential incorrect');
+			//compare password
+			const pwMatches = await argon.verify(user.hash, dto.password);
+			//if password incorrect throw exception
+			if (!pwMatches) throw new ForbiddenException('Credential incorrect');
+			//send back the user
+			// delete user.hash;
+			const tokenResponse = await this.signToken(user.id, user.email);
+			if (!tokenResponse)
+				throw new BadRequestException(`Cannot Get User Name: ${dto.name}, Email: ${dto.email}`);
+			// Set cookie with Token
+			res.cookie('access_token', tokenResponse.access_token, {
+				httpOnly: true,
+				secure: this.config.get('NODE_ENV', 'development') === 'production',
+				maxAge: 30 * 24 * 60 * 60 * 1000, //30d
+				sameSite: 'lax',
+			});
+			//Сut the hash from the user data
+			const { hash, ...userData } = user;
+			return { ...userData };
+		} catch (error) {
+			console.error('Error in signin function:', error);
+			throw error;
+		}
 	}
 
 	async signToken(userId: string, email: string): Promise<{ access_token: string }> {
