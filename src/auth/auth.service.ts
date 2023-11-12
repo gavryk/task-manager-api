@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
@@ -38,7 +38,7 @@ export class AuthService {
 		}
 	}
 
-	async signin(dto: AuthDto) {
+	async signin(dto: AuthDto, res: Response) {
 		//Find the user by email
 		const user = await this.prisma.user.findUnique({
 			where: {
@@ -54,8 +54,15 @@ export class AuthService {
 		//send back the user
 		// delete user.hash;
 		const tokenResponse = await this.signToken(user.id, user.email);
+		if (!tokenResponse)
+			throw new BadRequestException(`Cannot Get User Name: ${dto.name}, Email: ${dto.email}`);
 		// Set cookie with Token
-		// res.cookie('access_token', tokenResponse.access_token, { httpOnly: true });
+		res.cookie('access_token', tokenResponse.access_token, {
+			httpOnly: true,
+			secure: this.config.get('NODE_ENV', 'development') === 'production',
+			maxAge: 30 * 24 * 60 * 60 * 1000, //30d
+			sameSite: 'lax',
+		});
 		return tokenResponse;
 	}
 
