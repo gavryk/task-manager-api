@@ -1,4 +1,9 @@
-import { BadRequestException, ForbiddenException, Injectable } from '@nestjs/common';
+import {
+	BadRequestException,
+	ForbiddenException,
+	Injectable,
+	UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthDto } from './dto';
 import * as argon from 'argon2';
@@ -15,6 +20,7 @@ export class AuthService {
 		private config: ConfigService,
 	) {}
 
+	//Register Function
 	async signup(dto: AuthDto) {
 		const { email, password } = dto;
 		//check if user exist
@@ -24,18 +30,21 @@ export class AuthService {
 			},
 		});
 		if (oldUser) throw new BadRequestException('User already exist');
-		//generate the password hash
-		const hash = await argon.hash(dto.password);
 		//save the new user in the db
 		try {
 			const user = await this.prisma.user.create({
 				data: {
 					email: dto.email,
 					name: dto.name,
-					hash,
+					hash: await argon.hash(dto.password),
 				},
 			});
-			return this.signToken(user.id, user.email);
+			const tokens = await this.signToken(user.id, user.email);
+			const { hash, ...userData } = user;
+			return {
+				user: userData,
+				...tokens,
+			};
 		} catch (error) {
 			if (error instanceof PrismaClientKnownRequestError) {
 				if (error.code === 'P2002') {
@@ -45,7 +54,7 @@ export class AuthService {
 			throw error;
 		}
 	}
-
+	//Login Function
 	async signin(dto: AuthDto, res: Response) {
 		try {
 			//Find the user by email
@@ -79,6 +88,24 @@ export class AuthService {
 			console.error('Error in signin function:', error);
 			throw error;
 		}
+	}
+
+	//RefreshToken Function
+	async getNewTokens(refreshToken: string) {
+		const result = await this.jwt.verifyAsync(refreshToken);
+		if (!result) throw new UnauthorizedException('Invalid refresh token');
+		console.log(result);
+		const user = await this.prisma.user.findUnique({
+			where: {
+				id: result.sub,
+			},
+		});
+		const tokens = await this.signToken(user.id, user.email);
+		const { hash, ...userData } = user;
+		return {
+			user: userData,
+			...tokens,
+		};
 	}
 
 	private async signToken(userId: string, email: string): Promise<{ access_token: string }> {
