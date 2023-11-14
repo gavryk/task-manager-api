@@ -16,6 +16,14 @@ export class AuthService {
 	) {}
 
 	async signup(dto: AuthDto) {
+		const { email, password } = dto;
+		//check if user exist
+		const oldUser = await this.prisma.user.findUnique({
+			where: {
+				email,
+			},
+		});
+		if (oldUser) throw new BadRequestException('User already exist');
 		//generate the password hash
 		const hash = await argon.hash(dto.password);
 		//save the new user in the db
@@ -73,7 +81,7 @@ export class AuthService {
 		}
 	}
 
-	async signToken(userId: string, email: string): Promise<{ access_token: string }> {
+	private async signToken(userId: string, email: string): Promise<{ access_token: string }> {
 		const payload = {
 			sub: userId,
 			email,

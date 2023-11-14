@@ -15,7 +15,9 @@ export class UserController {
 	}
 
 	@Get()
-	getAllUsers() {
-		return this.prisma.user.findMany();
+	async getAllUsers() {
+		return await this.prisma.user.findMany().then((users) => {
+			return users.map(({ hash, ...user }) => user);
+		});
 	}
 }
