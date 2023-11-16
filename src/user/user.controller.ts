@@ -14,6 +14,7 @@ export class UserController {
 		return user;
 	}
 
+	@UseGuards(JwtGuard)
 	@Get()
 	async getAllUsers() {
 		return await this.prisma.user.findMany().then((users) => {
