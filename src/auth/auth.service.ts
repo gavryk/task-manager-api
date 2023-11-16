@@ -71,6 +71,13 @@ export class AuthService {
 		}
 	}
 
+	//Logout Func
+	async logout(res: Response) {
+		res.clearCookie('access_token');
+		res.clearCookie('refresh_token');
+		return { message: 'Logout successful' };
+	}
+
 	//--------------------Additional Methods--------------------
 	//RefreshToken Function
 	async getNewToken(refreshToken: string, res: Response) {

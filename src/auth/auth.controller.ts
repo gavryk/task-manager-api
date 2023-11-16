@@ -24,4 +24,9 @@ export class AuthController {
 		const dataResponse = await this.authService.getNewToken(dto.refreshToken, res);
 		return dataResponse;
 	}
+
+	@Post('logout')
+	async logout(@Res({ passthrough: true }) res: Response) {
+		return await this.authService.logout(res);
+	}
 }
