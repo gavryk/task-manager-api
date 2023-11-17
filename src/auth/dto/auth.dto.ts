@@ -9,7 +9,7 @@ import {
 	ValidateIf,
 } from 'class-validator';
 
-export class AuthDto {
+class BaseAuthDto {
 	@IsEmail()
 	@IsNotEmpty()
 	email: string;
@@ -17,13 +17,17 @@ export class AuthDto {
 	@IsString()
 	@IsNotEmpty()
 	@MinLength(6, {
-		message: 'Password must be at least 6 charcters long',
+		message: 'Password must be at least 6 characters long',
 	})
 	password: string;
 
 	@IsString()
 	name: string = 'John Doe';
+}
 
+export class AuthDto extends BaseAuthDto {}
+
+export class AuthRegDto extends BaseAuthDto {
 	@IsString()
 	@IsNotEmpty()
 	role: Role;

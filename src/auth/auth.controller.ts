@@ -1,6 +1,6 @@
 import { Body, Controller, HttpCode, HttpStatus, Post, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthDto, refreshTokenDto } from './dto';
+import { AuthDto, AuthRegDto, refreshTokenDto } from './dto';
 import { Response } from 'express';
 
 @Controller('auth')
@@ -9,7 +9,7 @@ export class AuthController {
 
 	@HttpCode(HttpStatus.OK)
 	@Post('register')
-	signup(@Body() dto: AuthDto) {
+	signup(@Body() dto: AuthRegDto) {
 		return this.authService.register(dto);
 	}
 

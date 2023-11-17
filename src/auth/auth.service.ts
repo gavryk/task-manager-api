@@ -6,7 +6,7 @@ import {
 	UnauthorizedException,
 } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { AuthDto } from './dto';
+import { AuthDto, AuthRegDto } from './dto';
 import * as argon from 'argon2';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
@@ -23,7 +23,7 @@ export class AuthService {
 	) {}
 
 	//Register Function
-	async register(dto: AuthDto) {
+	async register(dto: AuthRegDto) {
 		const { email, password, adminKey, role } = dto;
 		//check if user exist
 		const oldUser = await this.prisma.user.findUnique({ where: { email } });
