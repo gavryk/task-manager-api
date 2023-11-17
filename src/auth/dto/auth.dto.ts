@@ -1,4 +1,13 @@
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { Role } from '@prisma/client';
+import {
+	Equals,
+	IsEmail,
+	IsNotEmpty,
+	IsOptional,
+	IsString,
+	MinLength,
+	ValidateIf,
+} from 'class-validator';
 
 export class AuthDto {
 	@IsEmail()
@@ -14,4 +23,14 @@ export class AuthDto {
 
 	@IsString()
 	name: string = 'John Doe';
+
+	@IsString()
+	@IsNotEmpty()
+	role: Role;
+
+	@IsString()
+	@IsOptional()
+	@Equals(process.env.ADMIN_KEY, { message: 'Invalid admin key' })
+	@ValidateIf((object, value) => object.role === 'ADMIN')
+	adminKey: string;
 }

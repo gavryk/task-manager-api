@@ -24,17 +24,21 @@ export class AuthService {
 
 	//Register Function
 	async register(dto: AuthDto) {
-		const { email, password } = dto;
+		const { email, password, adminKey, role } = dto;
 		//check if user exist
 		const oldUser = await this.prisma.user.findUnique({ where: { email } });
 		if (oldUser) throw new BadRequestException('User already exist');
 		//save the new user in the db
 		try {
+			if (role === 'ADMIN' && adminKey !== this.config.get('ADMIN_KEY')) {
+				throw new UnauthorizedException('Invalid admin key');
+			}
 			const user = await this.prisma.user.create({
 				data: {
 					email: dto.email,
 					name: dto.name,
 					hash: await argon.hash(password),
+					role: dto.role,
 				},
 			});
 			const tokens = await this.signToken(user.id, user.email);
