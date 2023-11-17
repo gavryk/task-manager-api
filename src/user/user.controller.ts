@@ -9,20 +9,20 @@ export class UserController {
 	constructor(private userService: UserService) {}
 
 	@UseGuards(JwtGuard)
-	@Get('profile')
-	getMe(@GetUser('id') id: string) {
-		return this.userService.getById(id);
+	@Get()
+	getAllUsers() {
+		return this.userService.getAllUsers();
+	}
+
+	@UseGuards(JwtGuard)
+	@Get('profile/:userId')
+	getUser(@Param('userId') userId: string) {
+		return this.userService.getUserById(userId);
 	}
 
 	@UseGuards(JwtGuard)
 	@Put('profile')
 	async updateUser(@GetUser('id') id: string, @Body() dto: UserDto) {
 		return this.userService.updateUser(id, dto);
-	}
-
-	@UseGuards(JwtGuard)
-	@Patch('profile/tasks/:taskId')
-	async toggleTask(@Param('taskId') taskId: string, @GetUser('id') id: string) {
-		return this.userService.toggleTask(id, taskId);
 	}
 }

@@ -10,7 +10,7 @@ export class TaskService {
 		return tasks;
 	}
 
-	async getUserTask(userId: string) {
+	async getUserTasks(userId: string) {
 		return this.prisma.task.findMany({
 			where: {
 				userId: userId,
