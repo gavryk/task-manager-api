@@ -1,24 +1,28 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { UserService } from './user.service';
+import { Body, Controller, Get, Param, Patch, Put, Req, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/guard';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { GetUser } from '../decorators';
-import { User } from '@prisma/client';
+import { UserDto } from './dto';
 
 @Controller('users')
 export class UserController {
-	constructor(private prisma: PrismaService) {}
+	constructor(private userService: UserService) {}
 
 	@UseGuards(JwtGuard)
-	@Get('me')
-	getMe(@GetUser() user: User) {
-		return user;
+	@Get('profile')
+	getMe(@GetUser('id') id: string) {
+		return this.userService.getById(id);
 	}
 
 	@UseGuards(JwtGuard)
-	@Get()
-	async getAllUsers() {
-		return await this.prisma.user.findMany().then((users) => {
-			return users.map(({ hash, ...user }) => user);
-		});
+	@Put('profile')
+	async updateUser(@GetUser('id') id: string, @Body() dto: UserDto) {
+		return this.userService.updateUser(id, dto);
+	}
+
+	@UseGuards(JwtGuard)
+	@Patch('profile/tasks/:taskId')
+	async toggleTask(@Param('taskId') taskId: string, @GetUser('id') id: string) {
+		return this.userService.toggleTask(id, taskId);
 	}
 }
