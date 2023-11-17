@@ -1,7 +1,18 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Get, Param } from '@nestjs/common';
 import { TaskService } from './task.service';
+import { PrismaService } from 'src/prisma/prisma.service';
 
-@Controller('task')
+@Controller('tasks')
 export class TaskController {
-  constructor(private readonly taskService: TaskService) {}
+	constructor(private readonly taskService: TaskService) {}
+
+	@Get()
+	async getAllTasks() {
+		return this.taskService.getAllTasks();
+	}
+
+	@Get('/:userId')
+	async getUserTasks(@Param('userId') userId: string) {
+		return this.taskService.getUserTask(userId);
+	}
 }
