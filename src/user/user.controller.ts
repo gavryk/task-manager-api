@@ -25,4 +25,10 @@ export class UserController {
 	async updateUser(@GetUser('id') id: string, @Body() dto: UserUpdateDto) {
 		return this.userService.updateUser(id, dto);
 	}
+
+	@UseGuards(JwtGuard)
+	@Patch('profile/:userId/tasks')
+	updateUserTasks(@Param('userId') userId: string, @Body() dto: UserUpdateDto) {
+		return this.userService.updateUserTasks(userId, dto);
+	}
 }

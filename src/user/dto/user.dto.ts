@@ -33,4 +33,8 @@ export class UserUpdateDto {
 	@IsOptional()
 	@IsArray()
 	tasks?: Task[];
+
+	@IsString()
+	@IsOptional()
+	userId?: string;
 }

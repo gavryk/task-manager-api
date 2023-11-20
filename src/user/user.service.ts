@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserDto, UserUpdateDto } from './dto';
+import { UserUpdateDto } from './dto';
 
 @Injectable()
 export class UserService {
@@ -14,7 +14,7 @@ export class UserService {
 				email: true,
 				name: true,
 				avatarPath: true,
-				tasks: { select: { id: true, title: true, description: true, status: true } },
+				tasks: { select: { id: true, title: true, description: true, status: true, userId: true } },
 			},
 		});
 		return users;
@@ -28,7 +28,7 @@ export class UserService {
 				email: true,
 				name: true,
 				avatarPath: true,
-				tasks: { select: { id: true, title: true, description: true, status: true } },
+				tasks: { select: { id: true, title: true, description: true, status: true, userId: true } },
 			},
 		});
 		return user;
@@ -48,13 +48,43 @@ export class UserService {
 					email: true,
 					name: true,
 					avatarPath: true,
-					tasks: { select: { id: true, title: true, description: true, status: true } },
+					tasks: {
+						select: { id: true, title: true, description: true, status: true, userId: true },
+					},
 				},
 			});
 			if (!updatedUser) {
 				throw new NotFoundException(`User with ID ${id} not found`);
 			}
 			return updatedUser;
+		} catch (error) {
+			throw new Error(`Unable to update task: ${error.message}`);
+		}
+	}
+
+	async updateUserTasks(userId: string, dto: UserUpdateDto) {
+		try {
+			await this.prisma.task.deleteMany({
+				where: { userId },
+			});
+			await this.prisma.task.createMany({
+				data: [...dto.tasks],
+			});
+
+			const user = this.prisma.user.findUnique({
+				where: { id: userId },
+				select: {
+					id: true,
+					email: true,
+					name: true,
+					avatarPath: true,
+					tasks: {
+						select: { id: true, title: true, description: true, status: true, userId: true },
+					},
+				},
+			});
+
+			return user;
 		} catch (error) {
 			throw new Error(`Unable to update task: ${error.message}`);
 		}
