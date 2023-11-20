@@ -22,6 +22,16 @@ export class TaskService {
 		});
 	}
 
+	//Get Tasks By Status
+	async getTasksByStatus(status: TaskStatus): Promise<Task[]> {
+		try {
+			const tasks = await this.prisma.task.findMany({ where: { status } });
+			return tasks;
+		} catch (error) {
+			throw new NotFoundException(`Task with status ${status} not found`);
+		}
+	}
+
 	//Create Task
 	async createTask(dto: CreateTaskDto): Promise<Task | { success: boolean; error: string }> {
 		try {

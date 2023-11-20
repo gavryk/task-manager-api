@@ -1,3 +1,4 @@
+import { Task } from '@prisma/client';
 import { IsArray, IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class UserDto {
@@ -13,5 +14,23 @@ export class UserDto {
 	name: string;
 
 	@IsArray()
-	tasks: string[];
+	tasks: Task[];
+}
+
+export class UserUpdateDto {
+	@IsOptional()
+	@IsEmail()
+	email?: string;
+
+	@IsOptional()
+	@IsString()
+	avatarPath?: string;
+
+	@IsString()
+	@IsOptional()
+	name?: string;
+
+	@IsOptional()
+	@IsArray()
+	tasks?: Task[];
 }

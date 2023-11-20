@@ -1,4 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
+import {
+	Body,
+	Controller,
+	Delete,
+	Get,
+	Param,
+	Patch,
+	Post,
+	Put,
+	Query,
+	UseGuards,
+} from '@nestjs/common';
 import { TaskService } from './task.service';
 import { JwtGuard } from 'src/auth/guard';
 import { TaskStatus } from '@prisma/client';
@@ -12,6 +23,12 @@ export class TaskController {
 	@Get()
 	async getAllTasks() {
 		return this.taskService.getAllTasks();
+	}
+	//Get Tasks By Status
+	@UseGuards(JwtGuard)
+	@Get('/filter')
+	async getTasksByStatus(@Query('status') status: TaskStatus) {
+		return this.taskService.getTasksByStatus(status);
 	}
 	//Get User Tasks
 	@UseGuards(JwtGuard)
@@ -27,19 +44,19 @@ export class TaskController {
 	}
 	//Update Task Status
 	@UseGuards(JwtGuard)
-	@Patch(':taskId/status')
+	@Patch('/:taskId/status')
 	async updateTaskStatus(@Param('taskId') taskId: string, @Body('status') newStatus: TaskStatus) {
 		return this.taskService.updateTaskStatus(taskId, newStatus);
 	}
 	//Update Task
 	@UseGuards(JwtGuard)
-	@Put(':taskId')
+	@Put('/:taskId')
 	async updateTask(@Param('taskId') taskId: string, @Body() dto: UpdateTaskDto) {
 		return this.taskService.updateTask(taskId, dto);
 	}
 	//Remove Task
 	@UseGuards(JwtGuard)
-	@Delete(':taskId')
+	@Delete('/:taskId')
 	async deleteTask(@Param('taskId') taskId: string): Promise<any> {
 		return this.taskService.deleteTask(taskId);
 	}
