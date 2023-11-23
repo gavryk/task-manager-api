@@ -13,6 +13,8 @@ import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Response } from 'express';
 import { User } from '@prisma/client';
+import { generateRandomPassword } from 'src/utils';
+import { MailerService } from '@nestjs-modules/mailer';
 
 @Injectable()
 export class AuthService {
@@ -20,6 +22,7 @@ export class AuthService {
 		private prisma: PrismaService,
 		private jwt: JwtService,
 		private config: ConfigService,
+		private mailerService: MailerService,
 	) {}
 
 	//Register Function
@@ -80,6 +83,25 @@ export class AuthService {
 		res.clearCookie('access_token');
 		res.clearCookie('refresh_token');
 		return { message: 'Logout successful' };
+	}
+
+	async forgotPassword(email: string) {
+		const user = await this.prisma.user.findUnique({ where: { email } });
+
+		if (!user) {
+			throw new NotFoundException('User not found');
+		}
+
+		const newPassword = generateRandomPassword();
+		await this.mailerService.sendMail({
+			to: email,
+			subject: 'Password Reset',
+			template: './password-reset',
+			context: {
+				name: user.name,
+				password: newPassword,
+			},
+		});
 	}
 
 	//--------------------Additional Methods--------------------

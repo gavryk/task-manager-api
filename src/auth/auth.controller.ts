@@ -29,4 +29,9 @@ export class AuthController {
 	async logout(@Res({ passthrough: true }) res: Response) {
 		return await this.authService.logout(res);
 	}
+
+	@Post('forgot-password')
+	async forgotPassword(@Body('email') email: string) {
+		return await this.authService.forgotPassword(email);
+	}
 }
