@@ -84,7 +84,7 @@ export class AuthService {
 		res.clearCookie('refresh_token');
 		return { message: 'Logout successful' };
 	}
-
+	//Forgot Password
 	async forgotPassword(email: string) {
 		const user = await this.prisma.user.findUnique({ where: { email } });
 
@@ -93,6 +93,11 @@ export class AuthService {
 		}
 
 		const newPassword = generateRandomPassword();
+		const hashedPassword = await argon.hash(newPassword);
+		await this.prisma.user.update({
+			where: { email },
+			data: { hash: hashedPassword },
+		});
 		await this.mailerService.sendMail({
 			to: email,
 			subject: 'Password Reset',
