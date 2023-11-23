@@ -2,7 +2,7 @@ import { UserService } from './user.service';
 import { Body, Controller, Get, Param, Patch, Put, UseGuards } from '@nestjs/common';
 import { JwtGuard } from 'src/auth/guard';
 import { GetUser } from '../decorators';
-import { UserUpdateDto } from './dto';
+import { UpdatePasswordDto, UserUpdateDto } from './dto';
 
 @Controller('users')
 export class UserController {
@@ -30,5 +30,11 @@ export class UserController {
 	@Patch('profile/:userId/tasks')
 	updateUserTasks(@Param('userId') userId: string, @Body() dto: UserUpdateDto) {
 		return this.userService.updateUserTasks(userId, dto);
+	}
+
+	@UseGuards(JwtGuard)
+	@Patch('profile/:userId/password')
+	updateUserPass(@Param('userId') userId: string, @Body() dto: UpdatePasswordDto) {
+		return this.userService.updateUserPass(userId, dto);
 	}
 }

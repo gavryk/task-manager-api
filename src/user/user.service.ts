@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UserUpdateDto } from './dto';
+import { UpdatePasswordDto, UserUpdateDto } from './dto';
+import * as argon from 'argon2';
 
 @Injectable()
 export class UserService {
@@ -61,7 +62,7 @@ export class UserService {
 			throw new Error(`Unable to update task: ${error.message}`);
 		}
 	}
-
+	//Update User Tasks List
 	async updateUserTasks(userId: string, dto: UserUpdateDto) {
 		try {
 			await this.prisma.task.deleteMany({
@@ -88,5 +89,31 @@ export class UserService {
 		} catch (error) {
 			throw new Error(`Unable to update task: ${error.message}`);
 		}
+	}
+
+	//Update User Password
+	async updateUserPass(userId: string, dto: UpdatePasswordDto) {
+		const existingUser = await this.prisma.user.findUnique({
+			where: { id: userId },
+			select: { id: true, email: true, hash: true },
+		});
+
+		if (!existingUser) {
+			throw new NotFoundException(`User with ID ${userId} not found`);
+		}
+		const isOldPasswordValid = await argon.verify(existingUser.hash, dto.oldPassword);
+
+		if (!isOldPasswordValid) {
+			throw new UnauthorizedException('Old password is incorrect');
+		}
+
+		const hashedNewPassword = await argon.hash(dto.newPassword);
+
+		await this.prisma.user.update({
+			where: { id: userId },
+			data: { hash: hashedNewPassword },
+		});
+
+		return existingUser;
 	}
 }
