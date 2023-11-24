@@ -33,7 +33,7 @@
 {
 	"email": "your-email",
 	"name": "your-name",
-	"role": "USER", //Role need to be ADMIN | USER
+	"role": "USER" /*Role need to be ADMIN | USER*/,
 	"password": "your-password"
 }
 ```
