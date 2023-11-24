@@ -29,13 +29,13 @@
 - **Метод:** `POST`
 - **Content-Type:** `application/json`
 
-````json
-  {
-  "email": "your-email",
-  "name": "your-name",
-  "role": "USER", //Role need to be ADMIN | USER
-  "password": "your-password"
-  }
+```json
+{
+	"email": "your-email",
+	"name": "your-name",
+	"role": "USER", //Role need to be ADMIN | USER
+	"password": "your-password"
+}
 ```
 
 ## Description
@@ -87,4 +87,7 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
-````
+
+```
+
+```
