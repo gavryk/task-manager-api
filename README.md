@@ -36,7 +36,7 @@
   "role": "USER", //Role need to be ADMIN | USER
   "password": "your-password"
   }
-
+```
 
 ## Description
 
