@@ -33,7 +33,19 @@
 {
 	"email": "your-email",
 	"name": "your-name",
-	"role": "USER" /*Role need to be ADMIN | USER*/,
+	"role": "USER", //Role need to be ADMIN | USER
+	"password": "your-password"
+}
+```
+
+- Login User
+- **URL:** `/api/auth/login`
+- **Метод:** `POST`
+- **Content-Type:** `application/json`
+
+```json
+{
+	"email": "your-email",
 	"password": "your-password"
 }
 ```
