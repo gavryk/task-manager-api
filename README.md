@@ -26,27 +26,185 @@
 
 - Register New User
 - **URL:** `/api/auth/register`
-- **Метод:** `POST`
+- **Method:** `POST`
 - **Content-Type:** `application/json`
 
 ```json
 {
 	"email": "your-email",
 	"name": "your-name",
-	"role": "USER", //Role need to be ADMIN | USER
+	"role": "USER or ADMIN",
 	"password": "your-password"
 }
 ```
 
+---
+
 - Login User
 - **URL:** `/api/auth/login`
-- **Метод:** `POST`
+- **Method:** `POST`
 - **Content-Type:** `application/json`
 
 ```json
 {
 	"email": "your-email",
 	"password": "your-password"
+}
+```
+
+---
+
+- Refresh Token
+- **URL:** `/api/auth/login/access-token`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+```json
+{
+	"refreshToken": "your-refresh-token"
+}
+```
+
+---
+
+- Forgot Password
+- **URL:** `/api/auth/forgot-password`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+```json
+{
+	"email": "your-email"
+}
+```
+
+---
+
+- Logout
+- **URL:** `/api/auth/logout`
+- **Method:** `POST`
+
+---
+
+- Get All Tasks
+- **URL:** `/api/tasks`
+- **Method:** `GET`
+
+---
+
+- Create Task
+- **URL:** `/api/tasks`
+- **Method:** `POST`
+- **Content-Type:** `application/json`
+
+```json
+{
+	"title": "task-title",
+	"description": "task-description",
+	"status": "NEW | IN_PROGRESS | PENDING | DONE",
+	"userId": "user-id"
+}
+```
+
+---
+
+- Update Task
+- **URL:** `/api/tasks/user-id`
+- **Method:** `PUT`
+- **Content-Type:** `application/json`
+
+```json
+{
+	"title": "task-title",
+	"description": "task-description",
+	"userId": "user-id"
+}
+```
+
+---
+
+- Update Task Status
+- **URL:** `/api/tasks/user-id/status`
+- **Method:** `PATCH`
+- **Content-Type:** `application/json`
+
+```json
+{
+	"status": "NEW | IN_PROGRESS | PENDING | DONE"
+}
+```
+
+---
+
+- Delete Task
+- **URL:** `/api/tasks/task-id`
+- **Method:** `DELETE`
+
+---
+
+- Filter Tasks
+- **URL:** `/api/tasks/filter?status=DONE | NEW | IN_PROGRESS`
+- **Method:** `GET`
+- **Content-Type:** `application/json`
+
+---
+
+- Get All User
+- **URL:** `/api/users`
+- **Method:** `GET`
+
+---
+
+- Get Uer
+- **URL:** `/api/users/profile/user-id`
+- **Method:** `GET`
+
+---
+
+- Update User
+- **URL:** `/api/users/profile/user-id`
+- **Method:** `PUT`
+- **Content-Type:** `application/json`
+
+```json
+{
+	"email": "user-email",
+	"name": "user-name",
+	"avatarPath": "user-photo"
+}
+```
+
+---
+
+- Get User Tasks
+- **URL:** `/api/tasks/user-id`
+- **Method:** `GET`
+- **Content-Type:** `application/json`
+
+---
+
+- Update Task Order For User List
+- **URL:** `/api/users/profile/user-id/tasks`
+- **Method:** `PATCH`
+- **Content-Type:** `application/json`
+
+```json
+{
+	"tasks": "must be array old tasks reformat to new order but still the same tasks"
+}
+```
+
+---
+
+- Update User Password
+- **URL:** `/api/users/profile/user-id/password`
+- **Method:** `PATCH`
+- **Content-Type:** `application/json`
+
+```json
+{
+	"oldPassword": "old-user-password",
+	"newPassword": "new-user-password"
 }
 ```
 
@@ -73,33 +231,8 @@ $ npm run start:dev
 $ npm run start:prod
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
 ## Stay in touch
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
-
-```
-
-```
+- Author - [Oleg Gvozd](https://www.facebook.com/profile.php?id=100003291303734)
+- Website - [LinkedIn](https://www.linkedin.com/in/oleg-gvozd-20a16116a/)
+- Instagram - [@gvozd_oleg](https://www.instagram.com/gvozd_oleg/)
