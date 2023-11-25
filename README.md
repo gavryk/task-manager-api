@@ -247,7 +247,27 @@ Example: GMAIL_PASS="password from your mail"
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+# Task Manager API
+
+The Task Manager API is a powerful and user-friendly application built with Nest JS, featuring various technologies to streamline task management.
+
+## Key Features
+
+- **JWT Token Authentication:** Secure your API with JSON Web Tokens for reliable user authentication and authorization.
+- **Prisma:** Leverage Prisma as the database toolkit to interact seamlessly with your database, ensuring data integrity and efficiency.
+- **Passport & Passport JWT:** Implement Passport for easy authentication and Passport JWT for handling JSON Web Tokens, making user authentication a breeze.
+- **Class Validator:** Utilize Class Validator to ensure the integrity of incoming data, validating and sanitizing user inputs effectively.
+- **Mailer & Nodemailer:** Enable email notifications and communication using Mailer and Nodemailer, enhancing user engagement and interaction.
+
+## Database Flexibility
+
+For example, this API is configured with a MongoDB database. However, thanks to Prisma, you have the flexibility to seamlessly switch to any other database without altering the code. Whether you prefer PostgreSQL, MySQL, or another database system, Prisma simplifies the process.
+
+Whether you're a developer looking to understand these technologies better or a user aiming for a straightforward yet powerful task management experience, the Task Manager API provides a robust solution.
+
+Explore the documentation to get started and make the most of the features offered by this Nest JS-powered API.
+
+---
 
 ## Installation
 
