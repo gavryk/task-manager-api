@@ -211,19 +211,39 @@
 ## Environment Variables
 
 **DATABASE_URL**
+Database for connect.
+
+```env
 Example: DATABASE_URL="mongodb+srv://user-db@cluster0.2boounk.mongodb.net/collection-name?retryWrites=true&w=majority"
+```
 
 **JWT_SECRET**
-Example: JWT_SECRET="secret-key for jwt token"
+Secret Key For JWT Token.
+
+```env
+Example: JWT_SECRET="secret-key"
+```
 
 **ADMIN_KEY**
+Admin Key For Register Admin.
+
+```env
 Example: ADMIN_KEY="Key When ADMIN Role Register"
+```
 
 **GMAIL_ACC**
-Example: GMAIL_ACC="your email for mailing, for example, if the user forgot his password, send him a new one"
+Your email for mailing, for example, if the user forgot his password, send him a new one.
+
+```env
+Example: GMAIL_ACC="your-email"
+```
 
 **GMAIL_PASS**
+Password for your mail.
+
+```env
 Example: GMAIL_PASS="password from your mail"
+```
 
 ## Description
 
