@@ -247,8 +247,6 @@ Example: GMAIL_PASS="password from your mail"
 
 ## Description
 
-# Task Manager API
-
 The Task Manager API is a powerful and user-friendly application built with Nest JS, featuring various technologies to streamline task management.
 
 ## Key Features
