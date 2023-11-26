@@ -220,6 +220,10 @@ Example: DATABASE_URL="mongodb+srv://user-db@cluster0.2boounk.mongodb.net/collec
 **PORT**
 If you need this you can change it. Default 3333.
 
+```env
+Example: PORT="7777"
+```
+
 **JWT_SECRET**
 Secret Key For JWT Token.
 
