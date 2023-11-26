@@ -217,6 +217,9 @@ Database for connect.
 Example: DATABASE_URL="mongodb+srv://user-db@cluster0.2boounk.mongodb.net/collection-name?retryWrites=true&w=majority"
 ```
 
+**PORT**
+If you need this you can change it. Default 3333.
+
 **JWT_SECRET**
 Secret Key For JWT Token.
 
