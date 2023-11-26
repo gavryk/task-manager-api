@@ -245,6 +245,13 @@ Password for your mail.
 Example: GMAIL_PASS="password from your mail"
 ```
 
+**CLIENT_URL**
+Client url for cors.
+
+```env
+Example: GMAIL_PASS="http://localhost:5173"
+```
+
 ## Description
 
 The Task Manager API is a powerful and user-friendly application built with Nest JS, featuring various technologies to streamline task management.
