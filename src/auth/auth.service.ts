@@ -173,6 +173,7 @@ export class AuthService {
 			secure: this.config.get('NODE_ENV', 'development') === 'production',
 			maxAge: 30 * 24 * 60 * 60 * 1000, // 30d
 			sameSite: 'lax',
+			path: '/',
 		});
 
 		res.cookie('refresh_token', tokens.refresh_token, {
@@ -180,6 +181,7 @@ export class AuthService {
 			secure: this.config.get('NODE_ENV', 'development') === 'production',
 			maxAge: 30 * 24 * 60 * 60 * 1000, // 30d
 			sameSite: 'lax',
+			path: '/',
 		});
 	}
 }
