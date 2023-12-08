@@ -15,6 +15,12 @@ export class UserController {
 	}
 
 	@UseGuards(JwtGuard)
+	@Get('profile/me')
+	getMe(@GetUser('id') id: string) {
+		return this.userService.getUserById(id);
+	}
+
+	@UseGuards(JwtGuard)
 	@Get('profile/:userId')
 	getUser(@Param('userId') userId: string) {
 		return this.userService.getUserById(userId);
