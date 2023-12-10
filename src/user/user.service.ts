@@ -29,6 +29,7 @@ export class UserService {
 				email: true,
 				name: true,
 				avatarPath: true,
+				role: true,
 				tasks: { select: { id: true, title: true, description: true, status: true, userId: true } },
 			},
 		});
